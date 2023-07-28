@@ -224,7 +224,7 @@
   center={false}
   short={true}
 >
-  <h1>Simulated Life Expectancy Trends in Philly-land</h1>
+  <h1>UHC Svelte Scrolly Template</h1>
   <p class="text-big" style="margin-top: 5px">
     Epsom Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sequi
     voluptate sed quisquam inventore quia odio illo maiores cum enim, aspernatur
