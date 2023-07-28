@@ -96,13 +96,6 @@
         rKey = 'pop';
         explore = false;
       },
-      chart05: () => {
-        xKey = 'area';
-        yKey = 'density';
-        zKey = null;
-        rKey = 'pop';
-        explore = true;
-      },
     },
   };
   // # ============================================================================ #
@@ -340,28 +333,6 @@
           The colour of each circle shows the <strong>state</strong> that the county
           is within.
         </p>
-      </div>
-    </section>
-    <section data-id="chart05">
-      <div class="col-medium">
-        <h3>Select a county</h3>
-        <p>
-          Use the selection box below or click on the chart to select a county.
-          The chart will also highlight the other counties in the same state.
-        </p>
-        {#if geojson}
-          <p>
-            <!-- svelte-ignore a11y-no-onchange -->
-            <select bind:value={selected}>
-              <option value={null}>Select one</option>
-              {#each geojson.features as place}
-                <option value={place.properties.AREACD}>
-                  {place.properties.AREANM}
-                </option>
-              {/each}
-            </select>
-          </p>
-        {/if}
       </div>
     </section>
   </div>
