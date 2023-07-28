@@ -33,6 +33,15 @@
  
 { # Outputs --------------------------------------------
   
+  { # Penguins ----------------------------------------------------------------
+   
+    df_penguins = penguins %>% drop_na()
+    
+    df_penguins %>% write_csv("../public/data/data_penguins.csv")
+    
+  }
+  
+  
   { ## Spatial -----------------------------------------------------------------
 
     region_tmp = 'Northeast'
