@@ -1,5 +1,8 @@
 <script>
-  // CORE IMPORTS
+  // # ============================================================================ #
+  // ............... script ...............
+  // # ============================================================================ #
+  // 1. Core imports
   import { setContext, onMount } from 'svelte';
   import { getMotion } from './utils.js';
   import { themes } from './config.js';
@@ -14,21 +17,26 @@
   import Toggle from './ui/Toggle.svelte';
   import Arrow from './ui/Arrow.svelte';
 
-  // DEMO-SPECIFIC IMPORTS
+  // # ============================================================================ #
+  // 2. Project sepecific imports
   import { getData, setColors, getBreaks, getColor } from './utils.js';
   import { colors } from './config.js';
   import { ScatterChart } from '@onsvisual/svelte-charts';
 
-  // CORE CONFIG (COLOUR THEMES)
+  // # ============================================================================ #
+  // 3. Core config
   // Set theme globally (options are 'light', 'dark' or 'lightblue')
   let theme = 'light';
   setContext('theme', theme);
   setColors(themes, theme);
 
-  // CONFIG FOR SCROLLER COMPONENTS
-  // Config
+  // # ============================================================================ #
+  // 4. Scroller Configs
+  //  - These dont change much between projects.
+  //// Config
   const threshold = 0.65;
-  // State
+
+  //// State
   let animation = getMotion(); // Set animation preference depending on browser preference
   let id = {}; // Object to hold visible section IDs of Scroller components
   let idPrev = {}; // Object to keep track of previous IDs, to compare for changes
@@ -36,41 +44,26 @@
     idPrev = { ...id };
   });
 
-  // DEMO-SPECIFIC CONFIG
-  // Constants
-  const dataset_named = [
-    { original: 'region', file: 'state' },
-    { original: 'district', file: 'county' },
-  ];
+  //// Code to run Scroller actions when new caption IDs come into view
+  function runActions(codes = []) {
+    codes.forEach((code) => {
+      if (id[code] != idPrev[code]) {
+        if (actions[code][id[code]]) {
+          actions[code][id[code]]();
+        }
+        idPrev[code] = id[code];
+      }
+    });
+  }
+  $: id && runActions(Object.keys(actions)); // Run above code when 'id' object changes
 
-  // Data
-  let data = { district: {}, region: {} };
-  let metadata = { district: {}, region: {} };
-  let geojson;
+  // # ============================================================================ #
+  // 5. Project Configs
+  // THese will change across projects
 
-  // State
-  let hovered; // Hovered district (chart or map)
-  let selected; // Selected district (chart or map)
-  $: region =
-    selected && metadata.district.lookup
-      ? metadata.district.lookup[selected].parent
-      : null; // Gets region code for 'selected'
-  $: chartHighlighted =
-    metadata.district.array && region
-      ? metadata.district.array
-          .filter((d) => d.parent == region)
-          .map((d) => d.code)
-      : []; // Array of district codes in 'region'
-  let xKey = 'area'; // xKey for scatter chart
-  let yKey = null; // yKey for scatter chart
-  let zKey = null; // zKey (color) for scatter chart
-  let rKey = null; // rKey (radius) for scatter chart
-  let explore = false; // Allows chart/map interactivity to be toggled on/off
-
-  // FUNCTIONS (INCL. SCROLLER ACTIONS)
-
-  // Actions for Scroller components
-  const actions = {
+  // # ============================================================================ #
+  //   5.1 Scrolly actions
+  let actions = {
     chart: {
       chart01: () => {
         xKey = 'area';
@@ -109,21 +102,42 @@
       },
     },
   };
+  // # ============================================================================ #
+  //   5.2 Constants
+  const dataset_named = [
+    { original: 'region', file: 'state' },
+    { original: 'district', file: 'county' },
+  ];
 
-  // Code to run Scroller actions when new caption IDs come into view
-  function runActions(codes = []) {
-    codes.forEach((code) => {
-      if (id[code] != idPrev[code]) {
-        if (actions[code][id[code]]) {
-          actions[code][id[code]]();
-        }
-        idPrev[code] = id[code];
-      }
-    });
-  }
-  $: id && runActions(Object.keys(actions)); // Run above code when 'id' object changes
+  // # ============================================================================ #
+  //   5.3 Data
+  let data = { district: {}, region: {} };
+  let metadata = { district: {}, region: {} };
+  let geojson;
+  // # ============================================================================ #
 
-  // INITIALISATION CODE
+  // # ============================================================================ #
+  //   5.4 State
+  let hovered; // Hovered district (chart or map)
+  let selected; // Selected district (chart or map)
+  $: region =
+    selected && metadata.district.lookup
+      ? metadata.district.lookup[selected].parent
+      : null; // Gets region code for 'selected'
+  $: chartHighlighted =
+    metadata.district.array && region
+      ? metadata.district.array
+          .filter((d) => d.parent == region)
+          .map((d) => d.code)
+      : []; // Array of district codes in 'region'
+  let xKey = 'area'; // xKey for scatter chart
+  let yKey = null; // yKey for scatter chart
+  let zKey = null; // zKey (color) for scatter chart
+  let rKey = null; // rKey (radius) for scatter chart
+  let explore = false; // Allows chart/map interactivity to be toggled on/off
+
+  // # ============================================================================ #
+  //   5.5 Initialisation code
   dataset_named.forEach((dataset) => {
     const geo = dataset.original;
     const uhc_geo = dataset.file;
@@ -187,6 +201,11 @@
     });
   });
 </script>
+
+<!-- 
+  # ============================================================================ #
+  #  ............... markup ...............
+-->
 
 <UHCHeader filled={true} center={false} />
 
@@ -346,6 +365,10 @@
 
 <UHCFooter />
 
+<!-- 
+  # ============================================================================ #
+  #  ............... style ...............
+-->
 <style>
   /* Styles specific to elements within the demo */
   :global(svelte-scroller-foreground) {
