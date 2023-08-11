@@ -1,5 +1,9 @@
-/node_modules/
+
 /public/build/
 
 .DS_Store
 .Rproj.user
+!node_modules/@onsvisual/svelte-charts/src/charts 
+!/node_modules/@onsvisual/svelte-charts/src/charts 
+
+/node_modules/
